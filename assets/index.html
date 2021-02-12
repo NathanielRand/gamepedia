@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>
+            Gamepedia
+        </title>
+    </head>
+<body>
+
+    <h1>Gamepedia - A Catalog of Awesome Games</h1>
+    <!--This section of the document specifies the table that will
+        be used to display the list of games and their descriptions.-->
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Description</th>
+            <th>Rating</th>
+            <th>Link</th>
+        </tr>
+        <td>Valorant</td>
+        <td>First-Person Shooter</td>
+        <td>Fast-paced shooter with little to no forgiveness for inaccuracy.</td>
+        <td>5</td>
+        <td><a href="https://playvalorant.com/en-us/">Valorant</a></td>
+    </table>
+    <br />
+
+    <!-- This section contains the form that will be used
+        to hit the 'POST /game" API-->
+    <form action="/game" method="POST">
+        Title: <input type="text" name="title">
+        <br />
+        Genre: <input type="text" name="genre">
+        <br />
+        Description: <input type="text" name="description">
+        <br />
+        Rating: <input type="text" name="rating">
+        <br />
+        Link: <input type="text" name="link">
+        <input type="submit" value="Submit">
+    </form>
+
+    <!-- Javascript that will run on page load and fetch the list of games and add them to our existing table. -->
+
+    <script>
+        gameTable = document.querySelector("table")
+
+        // Use the browser's 'fetch' API to make a GET call to /game
+        // We expect the response to be a JSON list of games, of the
+        // form: 
+        // [
+        //  {"title":"...","genre":"...","description":"...","rating":"...",
+        //    "link":"...",}, etc...
+        // ]
+
+        fetch("/game")
+            .then(response => response.json())
+            .then(gameList => {
+                // Once we fetch the list, we iterate over it.
+                gameList.forEach(game => {
+                    // Create the table row.
+                    row = document.createElement("tr")
+
+                    // Create the table data elements for the title,
+                    // genre, description, rating, and link columns.
+                    title = document.createElement("td")
+                    title.innerHTML = game.title
+                    genre = document.createElement("td")
+                    genre.innerHTML = game.genre
+                    description = document.createElement("td")
+                    description.innerHTML = game.description
+                    rating = document.createElement("td")
+                    rating.innerHTML = game.rating
+                    link = document.createElement("td")
+                    link.innerHTML = game.link
+
+                    // Add the data elements to the row.
+                    row.appendChild(title)
+                    row.appendChild(genre)
+                    row.appendChild(description)
+                    row.appendChild(rating)
+                    row.appendChild(link)
+
+                    // Add the row element to the table.
+                    gameTable.appendChild(row)
+                })
+            })
+    </script>
+
+</body>
+</html>
